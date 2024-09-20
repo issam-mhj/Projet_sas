@@ -11,6 +11,7 @@ int check_pass(char a[], char user[]);
 void admin_menu();
 void new_reclam();
 void affich_reclam();
+void edit_reclam(); 
 
 int countclients = 0;
 int countreclam = 0;
@@ -214,7 +215,7 @@ void admin_menu()
             affich_reclam();
             break;
         case 3:
-            // edit_reclam();
+            edit_reclam();
             break;
         case 4:
             // traiter_reclam();
@@ -263,6 +264,8 @@ void new_reclam()
     printf("**********************************************************************\n");
 }
 
+//affiche la reclam
+
 void affich_reclam(){
     printf("le nombre de reclamations existantes:%d\n",countreclam);
     for(int i=0;i<countreclam;i++){
@@ -274,6 +277,39 @@ void affich_reclam(){
         printf("**********Descriptions***********\n%s\n",reclamations[i].description);
         printf("Le statut de la reclamation=(%s)\n-----------------------------------------\n",reclamations[i].status);
     }
+}
+
+// modifier la reclam
+
+void edit_reclam(){
+    int choice,idReclam,isfound=0;
+    printf("entrez ID de reclamation: \n");
+    scanf("%d",idReclam);
+    for(int i=0;i<countreclam;i++){
+        if(idReclam==reclamations[i].id){
+            printf("id est trouve");
+            break;
+            isfound=1;
+        }
+    }
+    if(isfound==1){
+        printf("\ntu peux editer: \n");
+        printf("(1) Le motif:\n(2)Description\n(3)Categorie\n");
+        printf("votre choix: ");
+        scanf("%d",&choice);
+        if(choice==1){
+
+        }else if(choice==2){
+
+        }else if(choice==3){
+
+        }else{
+            printf("ce choix n'existe pas");
+        }
+    }else{
+        printf("id n'est trouve pas");
+    }
+
 }
 
 int main()
