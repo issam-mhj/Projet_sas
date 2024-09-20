@@ -1,17 +1,21 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <time.h>
 
 void menu_user();
 void sign_up();
 void sign_in();
 int check_pass(char a[], char user[]);
 void admin_menu();
+void new_reclam();
 
 int countclients = 0;
+int countreclam = 0;
 int isAdmin = 0;
-char admin_user[]= "admin";
-char admin_passw[]= "Admin.123";
+char admin_user[] = "admin";
+char admin_passw[] = "Admin.123";
 
 struct clients
 {
@@ -24,18 +28,28 @@ struct clients
 
 struct clients data[100];
 
+struct reclamation
+{
+    int id;
+    char motif[50];
+    char description[200];
+    char categorie[20];
+    char status[];
+    //*****************************************date********************************************
+};
+struct reclamation reclamations[100];
+
 // first page (menu)
 
 void menu_user()
 {
-    int choix;
-    printf("\nbienvenue sur notre site de gerer les reclamations de notre clients\n");
-    printf("voulez-vous : \n");
+    int choix, count = 0;
     do
     {
-        printf("\n (1) creer un compte\n");
-        printf(" (2) se connecter\n");
-        printf(" (3) quitter le programme\n");
+        printf("voulez-vous : \n");
+        printf("\n(1) creer un compte\n");
+        printf("(2) se connecter\n");
+        printf("(3) quitter le programme\n");
         scanf("%d", &choix);
         switch (choix)
         {
@@ -124,7 +138,7 @@ void sign_in()
 {
     char nom[30], password[30];
     int count, pass = 0;
-    isAdmin=0;
+    isAdmin = 0;
     struct clients login;
     for (count = 0; count < 3; count++)
     {
@@ -132,10 +146,10 @@ void sign_in()
         scanf(" %[^\n]", nom);
         printf("entrez votre mot de passe: ");
         scanf(" %[^\n]", password);
-        if (strcmp(nom, admin_user) == 0 && strcmp(password, admin_passw)==0)
+        if (strcmp(nom, admin_user) == 0 && strcmp(password, admin_passw) == 0)
         {
-            isAdmin=1;
-            pass=1;
+            isAdmin = 1;
+            pass = 1;
         }
         else
         {
@@ -158,34 +172,41 @@ void sign_in()
         }
     }
 
-    if (pass == 1 && isAdmin ==1)
+    if (pass == 1 && isAdmin == 1)
     {
         admin_menu();
     }
     if (count >= 3)
-        printf("desole, vous avez depasse le nombre maximum de tentatives, reessayez plus tard\n");
-    sleep(10);
+    {
+        printf("desole, vous avez depasse le nombre maximum de tentatives, reessayez apres 10 secondes\n");
+        sleep(10);
+    }
+
+    count = 0;
 }
 
-//admin interface
+// admin interface
 
-void admin_menu(){
-    int choix=0;
+void admin_menu()
+{
+    int choix = 0;
     printf("*****vous etes l'administrateur*****\n\n");
-    do{
-    printf("[1]  Ajouter une reclamation\n");
-    printf("[2]  Afficher la liste des reclamations\n");
-    printf("[3]  Modifier ou supprimer une reclamation\n");
-    printf("[4]  Traiter une reclamation\n");
-    printf("[5]  Rechercher une reclamation\n");
-    printf("[6]  Systeme de priorite\n");
-    printf("[7]  Afficher les reclamations ordonnees par priorite\n");
-    printf("[8]  Se deconnecter\n");
-    printf("votre choix= ");
-    scanf("%d",&choix);
-    switch (choix){
+    do
+    {
+        printf("[1]  Ajouter une reclamation\n");
+        printf("[2]  Afficher la liste des reclamations\n");
+        printf("[3]  Modifier ou supprimer une reclamation\n");
+        printf("[4]  Traiter une reclamation\n");
+        printf("[5]  Rechercher une reclamation\n");
+        printf("[6]  Systeme de priorite\n");
+        printf("[7]  Afficher les reclamations ordonnees par priorite\n");
+        printf("[8]  Se deconnecter\n");
+        printf("votre choix= ");
+        scanf("%d", &choix);
+        switch (choix)
+        {
         case 1:
-            // new_reclam();
+            new_reclam();
             break;
         case 2:
             // affich_reclam();
@@ -194,33 +215,53 @@ void admin_menu(){
             // edit_reclam();
             break;
         case 4:
-            //traiter_reclam();
+            // traiter_reclam();
             break;
         case 5:
-            //find_reclam();
+            // find_reclam();
             break;
         case 6:
-            //syst_prior();
+            // syst_prior();
             break;
         case 7:
-            //affich_byprio();
+            // affich_byprio();
             break;
         case 8:
             printf("***Vous etes deconnecte***\n\n");
             break;
         default:
-        printf("ce choix n'existe pas, essayez-en un autre\n");
-        break;
-    }
-    }while(choix!=8);
+            printf("ce choix n'existe pas, essayez-en un autre\n");
+            break;
+        }
+    } while (choix != 8);
+}
 
-    if (choix==8)
-        menu_user();
+// ajjouter reclam
+
+void new_reclam()
+{
+    struct reclamation new_reclam;
+    char status[] = "en cours";
+    srand(time(0));
+    new_reclam.id = rand() % 1000;
+    strcpy(new_reclam.status, status);
+    printf("\n----------------Ajouter votre reclamation---------------\n");
+    printf("\n\nentrez le motif de la reclamation: \n");
+    scanf(" %[^\n]", new_reclam.motif);
+    printf("**********Description**********\n");
+    scanf(" %[^\n]", new_reclam.description);
+    printf("\n\nLa categorie de la reclamation\n");
+    scanf(" %[^\n]", new_reclam.categorie);
+    //////////DATE
+    reclamations[countreclam] = new_reclam;
+    countreclam++;
+    printf("\n             votre reclamation a ete enregistree avec succes\n");
+    printf("**********************************************************************\n");
 }
 
 int main()
 {
-
+    printf("bienvenue sur notre site de gerer les reclamations de notre clients\n");
     menu_user();
 
     return 0;
