@@ -10,6 +10,7 @@ void sign_in();
 int check_pass(char a[], char user[]);
 void admin_menu();
 void new_reclam();
+void affich_reclam();
 
 int countclients = 0;
 int countreclam = 0;
@@ -31,10 +32,11 @@ struct clients data[100];
 struct reclamation
 {
     int id;
+    char usernam[20];
     char motif[50];
     char description[200];
     char categorie[20];
-    char status[];
+    char status[50];
     //*****************************************date********************************************
 };
 struct reclamation reclamations[100];
@@ -209,7 +211,7 @@ void admin_menu()
             new_reclam();
             break;
         case 2:
-            // affich_reclam();
+            affich_reclam();
             break;
         case 3:
             // edit_reclam();
@@ -244,9 +246,11 @@ void new_reclam()
     char status[] = "en cours";
     srand(time(0));
     new_reclam.id = rand() % 1000;
-    strcpy(new_reclam.status, status);
+    strcpy(new_reclam.status,status);
     printf("\n----------------Ajouter votre reclamation---------------\n");
-    printf("\n\nentrez le motif de la reclamation: \n");
+    printf("\n\nnom d'utilisateur\n");
+    scanf(" %[^\n]", new_reclam.usernam);
+    printf("\nentrez le motif de la reclamation: \n");
     scanf(" %[^\n]", new_reclam.motif);
     printf("**********Description**********\n");
     scanf(" %[^\n]", new_reclam.description);
@@ -257,6 +261,19 @@ void new_reclam()
     countreclam++;
     printf("\n             votre reclamation a ete enregistree avec succes\n");
     printf("**********************************************************************\n");
+}
+
+void affich_reclam(){
+    printf("le nombre de reclamations existantes:%d\n",countreclam);
+    for(int i=0;i<countreclam;i++){
+        printf("-----------------------------------------\nla reclamation numero %d:\n",i+1);
+        printf("ID du reclamation:%d\n",reclamations[i].id);
+        printf("le nom du client:%s\n",reclamations[i].usernam);
+        printf("rempli le \n");
+        printf("Le motif de la reclamation %s\n",reclamations[i].motif);
+        printf("**********Descriptions***********\n%s\n",reclamations[i].description);
+        printf("Le statut de la reclamation=(%s)\n-----------------------------------------\n",reclamations[i].status);
+    }
 }
 
 int main()
