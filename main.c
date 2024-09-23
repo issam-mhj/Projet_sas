@@ -17,6 +17,8 @@ void find_reclam();
 void gest_users();
 void affich_byprio();
 void agent_menu();
+void client_menu();
+void client_MS_reclam();
 
 int countclients = 0;
 int countreclam = 0;
@@ -210,7 +212,7 @@ void sign_in()
     }
     else
     {
-        printf("simple client");
+        client_menu();
     }
 
     if (count >= 3)
@@ -710,7 +712,7 @@ void affich_byprio()
 void agent_menu()
 {
      int choix = 0;
-    printf("*****vous etes l'agent de reclamation*****\n\n");
+    printf("\n\n*****vous etes l'agent de reclamation*****\n\n");
     do
     {
         printf("[1]  Ajouter une reclamation\n");
@@ -747,6 +749,116 @@ void agent_menu()
         }
     } while (choix != 6);
 }
+
+// client menu
+
+void client_menu()
+{
+     int choix = 0;
+    printf("*****\tbienvenue\t*****\n\n");
+    do
+    {
+        printf("[1]  Ajouter une reclamation\n");
+        printf("[2]  Modifier ou supprimer une reclamation\n");
+        printf("[3]  Se deconnecter\n");
+        printf("votre choix= ");
+        scanf("%d", &choix);
+        switch (choix)
+        {
+        case 1:
+            new_reclam();
+            break;
+        case 2:
+            edit_reclam();
+            break;
+        case 3:
+            printf("***Vous etes deconnecte***\n\n");
+            break;
+        default:
+            printf("ce choix n'existe pas, essayez-en un autre\n");
+            break;
+        }
+    } while (choix != 3);
+}
+
+// client modifier ou supprime ..
+
+void client_MS_reclam()
+{
+    int choice, idReclam, isfound = 0, ind_reclam = 0;
+    printf("entrez ID de reclamation: \n");
+    scanf("%d", &idReclam);
+    for (int i = 0; i < countreclam; i++)
+    {
+        if (idReclam == reclamations[i].id)
+        {
+            printf("id est trouve");
+            isfound = 1;
+            ind_reclam = i;
+            break;
+        }
+    }
+    if (isfound == 1)
+    {
+         int choix;
+         printf("\n (1) pour modifier la reclamation \n (2) pour supprimer la reclamation \nvotre choix: ");
+         scanf("%d", &choix);
+         if (choix == 1)
+         {
+            printf("voulez-vouz modifiez:\n");
+            printf("   (1) Le motif:\n   (2)Description\n   (3)Categorie\n");
+            printf("votre choix: ");
+            scanf("%d", &choice);
+            if (choice == 1)
+            {
+                char newmotif[50];
+                printf("le motif: %s \n", reclamations[ind_reclam].motif);
+                printf("entrez votre modification: ");
+                scanf(" %[^\n]", newmotif);
+                strcpy(reclamations[ind_reclam].motif, newmotif);
+            }
+            else if (choice == 2)
+            {
+                char new_descrip[200];
+                printf("la description: %s \n", reclamations[ind_reclam].description);
+                printf("entrez votre modification: ");
+                scanf(" %[^\n]", new_descrip);
+                strcpy(reclamations[ind_reclam].description, new_descrip);
+            }
+            else if (choice == 3)
+            {
+                char new_category[20];
+                printf("la category: %s \n", reclamations[ind_reclam].categorie);
+                printf("entrez votre modification: ");
+                scanf(" %[^\n]", new_category);
+                strcpy(reclamations[ind_reclam].categorie, new_category);
+            }
+            else
+            {
+                printf("\nce choix n'existe pas\n");
+            }
+         }
+        else if (choix == 2)
+        {
+            int temp;
+            for (int i = ind_reclam; i < countreclam - 1; i++)
+            {
+                reclamations[i] = reclamations[i + 1];
+            }
+            countreclam -= 1;
+            printf("\nla reclamation a ete supprimee\n");
+        }
+        else
+        {
+            printf("\nce choix n'existe pas\n");
+        }
+    }
+    else
+    {
+        printf("id n'est trouve pas");
+    }
+}
+
 
 int main()
 {
