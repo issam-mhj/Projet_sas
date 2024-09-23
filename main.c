@@ -16,6 +16,7 @@ void traiter_reclam();
 void find_reclam();
 void gest_users();
 void affich_byprio();
+void agent_menu();
 
 int countclients = 0;
 int countreclam = 0;
@@ -173,12 +174,17 @@ void sign_in()
                 if (strcmp(data[i].identifiant, nom) == 0 && strcmp(data[i].mot_de_passe, password) == 0)
                 {
                     printf("%s,vous etes connecte a votre compte ", data[i].prenom);
-                    if(data[i].client_type==1){
-                        isAdmin=1;
-                    }else if(data[i].client_type==2){
-                        isAdmin=2;
-                    }else{
-                        isAdmin=3;
+                    if (data[i].client_type == 1)
+                    {
+                        isAdmin = 1;
+                    }
+                    else if (data[i].client_type == 2)
+                    {
+                        isAdmin = 2;
+                    }
+                    else
+                    {
+                        isAdmin = 3;
                     }
                     pass = 1;
                     break;
@@ -197,9 +203,13 @@ void sign_in()
     if (pass == 1 && isAdmin == 1)
     {
         admin_menu();
-    }else if (pass == 1 && isAdmin == 2){
-        printf("you are the agent");
-    }else{
+    }
+    else if (pass == 1 && isAdmin == 2)
+    {
+        agent_menu();
+    }
+    else
+    {
         printf("simple client");
     }
 
@@ -249,6 +259,7 @@ void admin_menu()
             break;
         case 6:
             gest_users();
+            break;
         case 7:
             affich_byprio();
             break;
@@ -586,39 +597,53 @@ void find_reclam()
     }
 }
 
-//gestions dusers 
+// gestions dusers
 
-void gest_users(){
+void gest_users()
+{
     int choix;
     printf("    (1) affiche les utilisateurs\n");
     printf("    (2) donner un role\n");
     printf("votre choix: ");
-    scanf("%d",&choix);
-    if(choix==1){
-        for(int i=0;i<countclients;i++){
-            printf("(%d) : %s \n",i+1,data[i].identifiant);
+    scanf("%d", &choix);
+    if (choix == 1)
+    {
+        for (int i = 0; i < countclients; i++)
+        {
+            printf("(%d) : %s \n", i + 1, data[i].identifiant);
         }
-    }else if(choix==2){
+    }
+    else if (choix == 2)
+    {
         struct clients role;
-        int choice,admin_agent;
+        int choice, admin_agent;
         char nom[20];
         printf("entrez le nom de l'utilisateur: \n");
-        scanf(" %[^\n]",nom);
-        for(int i =0;i<countclients;i++){
-            if(strcmp(nom,data[i].identifiant)==0){
+        scanf(" %[^\n]", nom);
+        for (int i = 0; i < countclients; i++)
+        {
+            if (strcmp(nom, data[i].identifiant) == 0)
+            {
                 printf("entrez [1] si vous voulez lui donner l'administrateur\n");
                 printf("entrez [2] si vous voulez lui donner l'agent de reclamation\n");
                 printf("entrez [3] si vous voulez lui donner normal client\n");
-                scanf("%d",&admin_agent);
-                if(admin_agent==1){
+                scanf("%d", &admin_agent);
+                if (admin_agent == 1)
+                {
                     data[i].client_type = 1;
-                }else if (admin_agent==2){
+                }
+                else if (admin_agent == 2)
+                {
                     data[i].client_type = 2;
-                }else{
+                }
+                else
+                {
                     data[i].client_type = 3;
                 }
                 break;
-            }else if(i==countclients-1){
+            }
+            else if (i == countclients - 1)
+            {
                 printf("\nl'utilisateur n'a pas ete trouve\n");
             }
         }
@@ -627,58 +652,101 @@ void gest_users(){
 
 // triees en fonction de priorite
 
-void affich_byprio(){
-    int i,choix;
-    printf("quelle est la priorite que tu veux montrer: \n[1] haute\n[2] moyenne\n[3] basse\n");
-    scanf("%d",&choix);
-    if (choix==1){
-    for(i=0;i<countreclam;i++){
-        if (strcmp(reclamations[i].priorat,"haute")==0){
-        printf("-----------------------------------------\nla reclamation numero %d:\n", i + 1);
-        printf("ID du reclamation:%d\n", reclamations[i].id);
-        printf("le nom du client:%s\n", reclamations[i].usernam);
-        printf("notes pour cette reclamation: %s\n", reclamations[i].notes);
-        printf("rempli le \n");
-        printf("Le motif de la reclamation %s\n", reclamations[i].motif);
-        printf("**********Descriptions***********\n%s\n", reclamations[i].description);
-        printf("la priorite : %s\n", reclamations[i].priorat);
-        printf("Le statut de la reclamation=(%s)\n-----------------------------------------\n", reclamations[i].status);
+void affich_byprio()
+{
+    int i;
+    printf("la priorite haute\n");
+    for (i = 0; i < countreclam; i++)
+    {
+        if (strcmp(reclamations[i].priorat, "haute") == 0)
+        {
+            printf("-----------------------------------------\nla reclamation numero %d:\n", i + 1);
+            printf("ID du reclamation:%d\n", reclamations[i].id);
+            printf("le nom du client:%s\n", reclamations[i].usernam);
+            printf("notes pour cette reclamation: %s\n", reclamations[i].notes);
+            printf("rempli le \n");
+            printf("Le motif de la reclamation %s\n", reclamations[i].motif);
+            printf("**********Descriptions***********\n%s\n", reclamations[i].description);
+            printf("la priorite : %s\n", reclamations[i].priorat);
+            printf("Le statut de la reclamation=(%s)\n-----------------------------------------\n", reclamations[i].status);
         }
     }
-    }else if(choix==2){
-        for(i=0;i<countreclam;i++){
-        if (strcmp(reclamations[i].priorat,"moyenne")==0){
-        printf("-----------------------------------------\nla reclamation numero %d:\n", i + 1);
-        printf("ID du reclamation:%d\n", reclamations[i].id);
-        printf("le nom du client:%s\n", reclamations[i].usernam);
-        printf("notes pour cette reclamation: %s\n", reclamations[i].notes);
-        printf("rempli le \n");
-        printf("Le motif de la reclamation %s\n", reclamations[i].motif);
-        printf("**********Descriptions***********\n%s\n", reclamations[i].description);
-        printf("la priorite : %s\n", reclamations[i].priorat);
-        printf("Le statut de la reclamation=(%s)\n-----------------------------------------\n", reclamations[i].status);
+    printf("la priorite moyenne:\n");
+    for (i = 0; i < countreclam; i++)
+    {
+        if (strcmp(reclamations[i].priorat, "moyenne") == 0)
+        {
+            printf("-----------------------------------------\nla reclamation numero %d:\n", i + 1);
+            printf("ID du reclamation:%d\n", reclamations[i].id);
+            printf("le nom du client:%s\n", reclamations[i].usernam);
+            printf("notes pour cette reclamation: %s\n", reclamations[i].notes);
+            printf("rempli le \n");
+            printf("Le motif de la reclamation %s\n", reclamations[i].motif);
+            printf("**********Descriptions***********\n%s\n", reclamations[i].description);
+            printf("la priorite : %s\n", reclamations[i].priorat);
+            printf("Le statut de la reclamation=(%s)\n-----------------------------------------\n", reclamations[i].status);
         }
     }
-    }else if (choix==3) {
-        for(i=0;i<countreclam;i++){
-        if (strcmp(reclamations[i].priorat,"basse")==0){
-        printf("-----------------------------------------\nla reclamation numero %d:\n", i + 1);
-        printf("ID du reclamation:%d\n", reclamations[i].id);
-        printf("le nom du client:%s\n", reclamations[i].usernam);
-        printf("notes pour cette reclamation: %s\n", reclamations[i].notes);
-        printf("rempli le \n");
-        printf("Le motif de la reclamation %s\n", reclamations[i].motif);
-        printf("**********Descriptions***********\n%s\n", reclamations[i].description);
-        printf("la priorite : %s\n", reclamations[i].priorat);
-        printf("Le statut de la reclamation=(%s)\n-----------------------------------------\n", reclamations[i].status);
+    printf("la priorite basse:\n");
+    for (i = 0; i < countreclam; i++)
+    {
+        if (strcmp(reclamations[i].priorat, "basse") == 0)
+        {
+            printf("-----------------------------------------\nla reclamation numero %d:\n", i + 1);
+            printf("ID du reclamation:%d\n", reclamations[i].id);
+            printf("le nom du client:%s\n", reclamations[i].usernam);
+            printf("notes pour cette reclamation: %s\n", reclamations[i].notes);
+            printf("rempli le \n");
+            printf("Le motif de la reclamation %s\n", reclamations[i].motif);
+            printf("**********Descriptions***********\n%s\n", reclamations[i].description);
+            printf("la priorite : %s\n", reclamations[i].priorat);
+            printf("Le statut de la reclamation=(%s)\n-----------------------------------------\n", reclamations[i].status);
         }
-    }
-    }else{
-        printf("ce choix n'existe pas\n");
     }
 }
 
+// agent menu
 
+void agent_menu()
+{
+     int choix = 0;
+    printf("*****vous etes l'agent de reclamation*****\n\n");
+    do
+    {
+        printf("[1]  Ajouter une reclamation\n");
+        printf("[2]  Afficher la liste des reclamations\n");
+        printf("[3]  Modifier ou supprimer une reclamation\n");
+        printf("[4]  Traiter une reclamation\n");
+        printf("[5]  Rechercher une reclamation\n");
+        printf("[6]  Se deconnecter\n");
+        printf("votre choix= ");
+        scanf("%d", &choix);
+        switch (choix)
+        {
+        case 1:
+            new_reclam();
+            break;
+        case 2:
+            affich_reclam();
+            break;
+        case 3:
+            edit_reclam();
+            break;
+        case 4:
+            traiter_reclam();
+            break;
+        case 5:
+            find_reclam();
+            break;
+        case 6:
+            printf("***Vous etes deconnecte***\n\n");
+            break;
+        default:
+            printf("ce choix n'existe pas, essayez-en un autre\n");
+            break;
+        }
+    } while (choix != 6);
+}
 
 int main()
 {
