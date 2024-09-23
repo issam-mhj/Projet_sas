@@ -15,6 +15,7 @@ void edit_reclam();
 void traiter_reclam();
 void find_reclam();
 void gest_users();
+void affich_byprio();
 
 int countclients = 0;
 int countreclam = 0;
@@ -249,7 +250,7 @@ void admin_menu()
         case 6:
             gest_users();
         case 7:
-            // affich_byprio();
+            affich_byprio();
             break;
         case 8:
             printf("***Vous etes deconnecte***\n\n");
@@ -621,6 +622,59 @@ void gest_users(){
                 printf("\nl'utilisateur n'a pas ete trouve\n");
             }
         }
+    }
+}
+
+// triees en fonction de priorite
+
+void affich_byprio(){
+    int i,choix;
+    printf("quelle est la priorite que tu veux montrer: \n[1] haute\n[2] moyenne\n[3] basse\n");
+    scanf("%d",&choix);
+    if (choix==1){
+    for(i=0;i<countreclam;i++){
+        if (strcmp(reclamations[i].priorat,"haute")==0){
+        printf("-----------------------------------------\nla reclamation numero %d:\n", i + 1);
+        printf("ID du reclamation:%d\n", reclamations[i].id);
+        printf("le nom du client:%s\n", reclamations[i].usernam);
+        printf("notes pour cette reclamation: %s\n", reclamations[i].notes);
+        printf("rempli le \n");
+        printf("Le motif de la reclamation %s\n", reclamations[i].motif);
+        printf("**********Descriptions***********\n%s\n", reclamations[i].description);
+        printf("la priorite : %s\n", reclamations[i].priorat);
+        printf("Le statut de la reclamation=(%s)\n-----------------------------------------\n", reclamations[i].status);
+        }
+    }
+    }else if(choix==2){
+        for(i=0;i<countreclam;i++){
+        if (strcmp(reclamations[i].priorat,"moyenne")==0){
+        printf("-----------------------------------------\nla reclamation numero %d:\n", i + 1);
+        printf("ID du reclamation:%d\n", reclamations[i].id);
+        printf("le nom du client:%s\n", reclamations[i].usernam);
+        printf("notes pour cette reclamation: %s\n", reclamations[i].notes);
+        printf("rempli le \n");
+        printf("Le motif de la reclamation %s\n", reclamations[i].motif);
+        printf("**********Descriptions***********\n%s\n", reclamations[i].description);
+        printf("la priorite : %s\n", reclamations[i].priorat);
+        printf("Le statut de la reclamation=(%s)\n-----------------------------------------\n", reclamations[i].status);
+        }
+    }
+    }else if (choix==3) {
+        for(i=0;i<countreclam;i++){
+        if (strcmp(reclamations[i].priorat,"basse")==0){
+        printf("-----------------------------------------\nla reclamation numero %d:\n", i + 1);
+        printf("ID du reclamation:%d\n", reclamations[i].id);
+        printf("le nom du client:%s\n", reclamations[i].usernam);
+        printf("notes pour cette reclamation: %s\n", reclamations[i].notes);
+        printf("rempli le \n");
+        printf("Le motif de la reclamation %s\n", reclamations[i].motif);
+        printf("**********Descriptions***********\n%s\n", reclamations[i].description);
+        printf("la priorite : %s\n", reclamations[i].priorat);
+        printf("Le statut de la reclamation=(%s)\n-----------------------------------------\n", reclamations[i].status);
+        }
+    }
+    }else{
+        printf("ce choix n'existe pas\n");
     }
 }
 
