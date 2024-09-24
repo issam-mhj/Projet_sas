@@ -351,6 +351,7 @@ void affich_reclam()
 void edit_reclam()
 {
     int choice, idReclam, isfound = 0, ind_reclam = 0;
+    time_t timenow;
     printf("entrez ID de reclamation: \n");
     scanf("%d", &idReclam);
     for (int i = 0; i < countreclam; i++)
@@ -381,6 +382,8 @@ void edit_reclam()
                 printf("entrez votre modification: ");
                 scanf(" %[^\n]", newmotif);
                 strcpy(reclamations[ind_reclam].motif, newmotif);
+                timenow= time(NULL);
+                strftime(reclamations[ind_reclam].date, 26, "%Y-%m-%S %H:%M:%S",localtime(&timenow));
             }
             else if (choice == 2)
             {
@@ -389,6 +392,8 @@ void edit_reclam()
                 printf("entrez votre modification: ");
                 scanf(" %[^\n]", new_descrip);
                 strcpy(reclamations[ind_reclam].description, new_descrip);
+                timenow = time(NULL);
+                strftime(reclamations[ind_reclam].date,26,"%Y-%m-%S %H:%M:%S",localtime(&timenow));
             }
             else if (choice == 3)
             {
@@ -397,6 +402,8 @@ void edit_reclam()
                 printf("entrez votre modification: ");
                 scanf(" %[^\n]", new_category);
                 strcpy(reclamations[ind_reclam].categorie, new_category);
+                timenow = time(NULL);
+                strftime(reclamations[ind_reclam].date,26,"%Y-%m-%S %H:%M:%S",localtime(&timenow));
             }
             else
             {
