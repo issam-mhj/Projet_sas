@@ -29,6 +29,7 @@ char prio_haute[] = {"urgence"};
 char prio_haute2[] = {"dangereux"};
 char prio_moyenne[] = {"crise"};
 char prio_moyenne2[] = {"rapid"};
+int current_user ;
 
 struct clients
 {
@@ -45,6 +46,7 @@ struct clients data[100];
 struct reclamation
 {
     int id;
+    char which_user[20];
     char usernam[20];
     char motif[50];
     char description[200];
@@ -187,6 +189,7 @@ void sign_in()
                     else
                     {
                         isAdmin = 3;
+                        current_user = i;
                     }
                     pass = 1;
                     break;
@@ -284,6 +287,9 @@ void new_reclam()
     char notes[100] = "aucune note pour le moment";
     srand(time(0));
     new_reclam.id = rand() % 1000;
+    if(isAdmin==3){
+        strcpy(new_reclam.which_user, data[current_user].identifiant);
+    }
     strcpy(new_reclam.status, status);
     printf("\n----------------Ajouter votre reclamation---------------\n");
     printf("\n\nnom d'utilisateur\n");
@@ -332,7 +338,6 @@ void affich_reclam()
         printf("Le statut de la reclamation=(%s)\n-----------------------------------------\n", reclamations[i].status);
     }
 }
-
 // modifier ou supprime la reclam
 
 void edit_reclam()
@@ -711,7 +716,7 @@ void affich_byprio()
 
 void agent_menu()
 {
-     int choix = 0;
+    int choix = 0;
     printf("\n\n*****vous etes l'agent de reclamation*****\n\n");
     do
     {
@@ -754,7 +759,7 @@ void agent_menu()
 
 void client_menu()
 {
-     int choix = 0;
+    int choix = 0;
     printf("*****\tbienvenue\t*****\n\n");
     do
     {
@@ -769,7 +774,7 @@ void client_menu()
             new_reclam();
             break;
         case 2:
-            edit_reclam();
+            client_MS_reclam();
             break;
         case 3:
             printf("***Vous etes deconnecte***\n\n");
@@ -786,6 +791,22 @@ void client_menu()
 void client_MS_reclam()
 {
     int choice, idReclam, isfound = 0, ind_reclam = 0;
+    printf("votre reclamations :\n");
+    for (int i = 0; i < countreclam; i++)
+    {
+        if (strcmp(reclamations[i].which_user, data[current_user].identifiant) == 0)
+        {
+            printf("-----------------------------------------\nla reclamation numero %d:\n", i + 1);
+            printf("ID du reclamation:%d\n", reclamations[i].id);
+            printf("le nom du client:%s\n", reclamations[i].usernam);
+            printf("notes pour cette reclamation: %s\n", reclamations[i].notes);
+            printf("rempli le \n");
+            printf("Le motif de la reclamation %s\n", reclamations[i].motif);
+            printf("**********Descriptions***********\n%s\n", reclamations[i].description);
+            printf("la priorite : %s\n", reclamations[i].priorat);
+            printf("Le statut de la reclamation=(%s)\n-----------------------------------------\n", reclamations[i].status);
+        }
+    }
     printf("entrez ID de reclamation: \n");
     scanf("%d", &idReclam);
     for (int i = 0; i < countreclam; i++)
@@ -800,11 +821,11 @@ void client_MS_reclam()
     }
     if (isfound == 1)
     {
-         int choix;
-         printf("\n (1) pour modifier la reclamation \n (2) pour supprimer la reclamation \nvotre choix: ");
-         scanf("%d", &choix);
-         if (choix == 1)
-         {
+        int choix;
+        printf("\n (1) pour modifier la reclamation \n (2) pour supprimer la reclamation \nvotre choix: ");
+        scanf("%d", &choix);
+        if (choix == 1)
+        {
             printf("voulez-vouz modifiez:\n");
             printf("   (1) Le motif:\n   (2)Description\n   (3)Categorie\n");
             printf("votre choix: ");
@@ -837,7 +858,7 @@ void client_MS_reclam()
             {
                 printf("\nce choix n'existe pas\n");
             }
-         }
+        }
         else if (choix == 2)
         {
             int temp;
@@ -858,7 +879,6 @@ void client_MS_reclam()
         printf("id n'est trouve pas");
     }
 }
-
 
 int main()
 {
