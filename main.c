@@ -23,6 +23,7 @@ void stats_rapp();
 
 int countclients = 0;
 int countreclam = 0;
+int countDelay=0;
 int isAdmin = 0;
 char admin_user[] = "admin";
 char admin_passw[] = "Admin.123";
@@ -31,6 +32,8 @@ char prio_haute2[] = {"dangereux"};
 char prio_moyenne[] = {"crise"};
 char prio_moyenne2[] = {"rapid"};
 int current_user ;
+time_t date_after_resol;
+time_t delayTime[100];
 
 struct clients
 {
@@ -470,6 +473,10 @@ void traiter_reclam()
         {
             strcpy(reclamations[ind_reclam].status, "resolu");
             printf("\nle processus reussit\n\n");
+            date_after_resol= time(NULL);
+            delayTime[countDelay]= date_after_resol - reclamations[ind_reclam].date_int;
+            countDelay++;
+
         }
         else
         {
@@ -914,9 +921,10 @@ void client_MS_reclam()
 
 void stats_rapp(){
     int choice,taux=0;
-    int num_resolue=0;
+    int num_resolue=0,num_of_delay=0;
     printf("\n   (1) Afficher le nombre total de reclamations\n");
     printf("   (2) Afficher le taux de resolution des reclamations\n");
+    printf("   (3)  le delai moyen de traitement des reclamations\n");
     scanf("%d",&choice);
         if(choice==1){
             printf("\n-----------------------------------------\n");
@@ -935,6 +943,11 @@ void stats_rapp(){
                 printf("le taux de resolution des reclamations= %d %%",taux);
                 printf("\n-----------------------------------------");
                 printf("\n-----------------------------------------\n");
+        }else if(choice ==3) {
+            for(int i=0;i<countDelay;i++){
+                num_of_delay += delayTime[i];
+            }
+            printf("\nle delai moyen de traitement=%d\n",num_of_delay/countDelay);
         }else{
             printf("\nce choix n'existe pas\n");
         }
