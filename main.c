@@ -23,7 +23,7 @@ void stats_rapp();
 
 int countclients = 0;
 int countreclam = 0;
-int countDelay = 0;
+int count_resol_rec = 0;
 int isAdmin = 0;
 char admin_user[] = "admin";
 char admin_passw[] = "Admin.123";
@@ -64,7 +64,6 @@ struct reclamation
 struct reclamation reclamations[100];
 
 // first page (menu)
-
 void menu_user()
 {
     int choix, count = 0;
@@ -101,11 +100,10 @@ void menu_user()
                 break;
             }
         }
-    } while (choix != 3 );
+    } while (choix != 3);
 }
 
 // check password in sign up
-
 int check_pass(char a[], char user[])
 {
     int i = 0, maj = 0, min = 0, dig = 0, char_sp = 0, somme = 0;
@@ -133,7 +131,6 @@ int check_pass(char a[], char user[])
 }
 
 // sign up
-
 void sign_up()
 {
     struct clients newuser;
@@ -167,7 +164,6 @@ void sign_up()
 }
 
 // sign in
-
 void sign_in()
 {
     char nom[30], password[30];
@@ -242,7 +238,6 @@ void sign_in()
 }
 
 // admin interface
-
 void admin_menu()
 {
     int choix = 0;
@@ -297,7 +292,6 @@ void admin_menu()
 }
 
 // ajjouter reclam
-
 void new_reclam()
 {
     struct reclamation new_reclam;
@@ -342,13 +336,15 @@ void new_reclam()
 }
 
 // affiche la reclam
-
 void affich_reclam()
 {
-    if (countreclam==0){
+    if (countreclam == 0)
+    {
         printf("\n0 reclamation pour le moment\n\n");
-    }else{
-    for (int i = 0; i < countreclam; i++)
+    }
+    else
+    {
+        for (int i = 0; i < countreclam; i++)
         {
             printf("\n-------------------------------------------------------------------\n");
             printf("ID du reclamation:              %d\n", reclamations[i].id);
@@ -357,14 +353,14 @@ void affich_reclam()
             printf("rempli le                       %s\n", reclamations[i].date);
             printf("Le motif de la reclamation      %s\n", reclamations[i].motif);
             printf("la priorite                    <%s>\n", reclamations[i].priorat);
-            printf("\n[Descriptions]\n***%s***\n", reclamations[i].description);
+            printf("\n[Descriptions]\n%s\n", reclamations[i].description);
             printf("\nLe statut de la reclamation=(%s)\n", reclamations[i].status);
             printf("----------------------------------------------------------------------\n");
         }
     }
 }
-// modifier ou supprime la reclam
 
+// modifier ou supprime la reclam
 void edit_reclam()
 {
     int choice, idReclam, isfound = 0, ind_reclam = 0;
@@ -403,7 +399,6 @@ void edit_reclam()
                 timenow = time(NULL);
                 new_recl.date_int = timenow;
                 strftime(reclamations[ind_reclam].date, 26, "%Y-%m-%S %H:%M:%S", localtime(&timenow));
-                
             }
             else if (choice == 2)
             {
@@ -412,6 +407,18 @@ void edit_reclam()
                 printf("entrez votre modification: ");
                 scanf(" %[^\n]", new_descrip);
                 strcpy(reclamations[ind_reclam].description, new_descrip);
+                if (strstr(reclamations[ind_reclam].description, prio_haute) != NULL || strstr(reclamations[ind_reclam].description, prio_haute2) != NULL)
+                {
+                    strcpy(reclamations[ind_reclam].priorat, "haute");
+                }
+                else if (strstr(reclamations[ind_reclam].description, prio_moyenne) != NULL || strstr(reclamations[ind_reclam].description, prio_moyenne2) != NULL)
+                {
+                    strcpy(reclamations[ind_reclam].priorat, "moyenne");
+                }
+                else
+                {
+                    strcpy(reclamations[ind_reclam].priorat, "basse");
+                }
                 timenow = time(NULL);
                 new_recl.date_int = timenow;
                 strftime(reclamations[ind_reclam].date, 26, "%Y-%m-%S %H:%M:%S", localtime(&timenow));
@@ -440,7 +447,7 @@ void edit_reclam()
                 reclamations[i] = reclamations[i + 1];
             }
             countreclam -= 1;
-            printf("\nla reclamation a ete supprimee\n");
+            printf("\nla reclamation a ete supprimee\n\n");
         }
         else
         {
@@ -454,7 +461,6 @@ void edit_reclam()
 }
 
 // traiter reclamations
-
 void traiter_reclam()
 {
     int idReclam, ind_reclam, isfound;
@@ -493,8 +499,8 @@ void traiter_reclam()
             strcpy(reclamations[ind_reclam].status, "resolu");
             printf("\nle processus reussit\n\n");
             date_after_resol = time(NULL);
-            delayTime[countDelay] = date_after_resol - reclamations[ind_reclam].date_int;
-            countDelay++;
+            delayTime[count_resol_rec] = date_after_resol - reclamations[ind_reclam].date_int;
+            count_resol_rec++;
         }
         else
         {
@@ -520,7 +526,6 @@ void traiter_reclam()
 }
 
 // find reclamation
-
 void find_reclam()
 {
     int choix, id;
@@ -604,7 +609,7 @@ void find_reclam()
         }
         break;
     case 4:
-        printf("entrez categorie de reclamation : \n");
+        printf("\nentrez categorie de reclamation : \n");
         scanf(" %[^\n]", category);
         for (int i = 0; i < countreclam; i++)
         {
@@ -658,7 +663,6 @@ void find_reclam()
 }
 
 // gestions dusers
-
 void gest_users()
 {
     int choix;
@@ -711,7 +715,6 @@ void gest_users()
 }
 
 // triees en fonction de priorite
-
 void affich_byprio()
 {
     int i;
@@ -766,7 +769,6 @@ void affich_byprio()
 }
 
 // agent menu
-
 void agent_menu()
 {
     int choix = 0;
@@ -809,7 +811,6 @@ void agent_menu()
 }
 
 // client menu
-
 void client_menu()
 {
     int choix = 0;
@@ -840,7 +841,6 @@ void client_menu()
 }
 
 // client modifier ou supprime ..
-
 void client_MS_reclam()
 {
     int choice, idReclam, isfound = 0, ind_reclam = 0;
@@ -938,13 +938,14 @@ void client_MS_reclam()
     }
 }
 
+//stats
 void stats_rapp()
 {
     int choice, taux = 0;
     int num_resolue = 0, num_of_delay = 0;
     printf("\n   (1) Afficher le nombre total de reclamations\n");
     printf("   (2) Afficher le taux de resolution des reclamations\n");
-    printf("   (3)  le delai moyen de traitement des reclamations\n");
+    printf("   (3) le delai moyen de traitement des reclamations\n");
     scanf("%d", &choice);
     if (choice == 1)
     {
@@ -954,7 +955,7 @@ void stats_rapp()
     }
     else if (choice == 2)
     {
-        if (countDelay == 0)
+        if (count_resol_rec == 0)
         {
             printf("\naucune resolu reclamation exist\n");
         }
@@ -975,17 +976,17 @@ void stats_rapp()
     }
     else if (choice == 3)
     {
-        if (countDelay == 0)
+        if (count_resol_rec == 0)
         {
             printf("\naucune resolu reclamation exist\n");
         }
         else
         {
-            for (int i = 0; i < countDelay; i++)
+            for (int i = 0; i < count_resol_rec; i++)
             {
                 num_of_delay += delayTime[i];
             }
-            printf("\nle delai moyen de traitement=%d\n", num_of_delay / countDelay);
+            printf("\nle delai moyen de traitement=%d s\n", num_of_delay / count_resol_rec);
         }
     }
     else
@@ -994,6 +995,7 @@ void stats_rapp()
     }
 }
 
+//main.
 int main()
 {
     printf("\n\n\t<<< bienvenue sur notre site de gerer les reclamations de notre clients>>>\n\n\n");
