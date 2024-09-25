@@ -23,7 +23,7 @@ void stats_rapp();
 
 int countclients = 0;
 int countreclam = 0;
-int countDelay=0;
+int countDelay = 0;
 int isAdmin = 0;
 char admin_user[] = "admin";
 char admin_passw[] = "Admin.123";
@@ -31,7 +31,7 @@ char prio_haute[] = {"urgence"};
 char prio_haute2[] = {"dangereux"};
 char prio_moyenne[] = {"crise"};
 char prio_moyenne2[] = {"rapid"};
-int current_user ;
+int current_user;
 time_t date_after_resol;
 time_t delayTime[100];
 
@@ -40,7 +40,6 @@ struct clients
     char nom[20];
     char prenom[20];
     char identifiant[20];
-    char tele[10];
     char mot_de_passe[30];
     int client_type;
 };
@@ -71,26 +70,38 @@ void menu_user()
     int choix, count = 0;
     do
     {
-        printf("voulez-vous : \n");
+        printf("\n------------------\n");
+        printf("   voulez-vous    ");
+        printf("\n------------------\n");
         printf("\n(1) creer un compte\n");
         printf("(2) se connecter\n");
         printf("(3) quitter le programme\n");
+        printf("votre choix: ");
         scanf("%d", &choix);
-        switch (choix)
+        if (choix < 0 || choix > 9)
         {
-        case 1:
-            sign_up();
-            break;
-        case 2:
-            sign_in();
-            break;
-        case 3:
-            break;
-        default:
             printf("ce choix n'existe pas, essayez-en un autre\n");
             break;
         }
-    } while (choix != 3);
+        else
+        {
+            switch (choix)
+            {
+            case 1:
+                sign_up();
+                break;
+            case 2:
+                sign_in();
+                break;
+            case 3:
+                break;
+            default:
+                printf("\n//ce choix n'existe pas\\\\\n");
+                printf("\\\\essayez-en un autre..//\n");
+                break;
+            }
+        }
+    } while (choix != 3 );
 }
 
 // check password in sign up
@@ -127,15 +138,13 @@ void sign_up()
 {
     struct clients newuser;
     int count = 0, checker;
-    printf("entrez vos informations maintenant \n");
+    printf("\nentrez vos informations maintenant \n");
     printf("\nvotre nom: ");
     scanf(" %[^\n]", newuser.nom);
     printf("votre prenom: ");
     scanf(" %[^\n]", newuser.prenom);
     printf("nom d'utilisateur: ");
     scanf(" %[^\n]", newuser.identifiant);
-    printf("numero de telephone: ");
-    scanf(" %[^\n]", newuser.tele);
     do
     {
         if (count == 0)
@@ -153,7 +162,7 @@ void sign_up()
     } while (checker == 0);
     data[countclients] = newuser;
     countclients++;
-    printf("vous avez cree un compte avec succes\n");
+    printf("\n[vous avez cree votre compte avec succes]\n");
     count = 0;
 }
 
@@ -182,7 +191,7 @@ void sign_in()
             {
                 if (strcmp(data[i].identifiant, nom) == 0 && strcmp(data[i].mot_de_passe, password) == 0)
                 {
-                    printf("%s,vous etes connecte a votre compte ", data[i].prenom);
+                    printf("\n%s,vous etes connecte a votre compte \n", data[i].prenom);
                     if (data[i].client_type == 1)
                     {
                         isAdmin = 1;
@@ -206,7 +215,7 @@ void sign_in()
             break;
         else
         {
-            printf("Informations incorrectes, veuillez reessayer\n");
+            printf("\nInformations incorrectes, veuillez reessayer\n");
         }
     }
 
@@ -218,14 +227,14 @@ void sign_in()
     {
         agent_menu();
     }
-    else if (pass==1 && isAdmin == 3)
+    else if (pass == 1 && isAdmin == 3)
     {
         client_menu();
     }
 
     if (count >= 3)
     {
-        printf("desole, vous avez depasse le nombre maximum de tentatives, reessayez apres 10 secondes\n");
+        printf("\ndesole, vous avez depasse le nombre maximum de tentatives, reessayez apres 10 secondes\n");
         sleep(10);
     }
 
@@ -236,8 +245,8 @@ void sign_in()
 
 void admin_menu()
 {
-    int choix=0;
-    printf("*****vous etes l'administrateur*****\n\n");
+    int choix = 0;
+    printf("\n\n*****vous etes l'administrateur*****\n\n");
     do
     {
         printf("[1]  Ajouter une reclamation\n");
@@ -278,10 +287,10 @@ void admin_menu()
             stats_rapp();
             break;
         case 9:
-            printf("***Vous etes deconnecte***\n\n");
+            printf("***\nVous etes deconnecte***\n\n");
             break;
         default:
-            printf("ce choix n'existe pas, essayez-en un autre\n");
+            printf("\nce choix n'existe pas, essayez-en un autre\n");
             break;
         }
     } while (choix != 9);
@@ -296,16 +305,17 @@ void new_reclam()
     char notes[100] = "aucune note pour le moment";
     srand(time(0));
     new_reclam.id = rand() % 1000;
-    if(isAdmin==3){
+    if (isAdmin == 3)
+    {
         strcpy(new_reclam.which_user, data[current_user].identifiant);
     }
     strcpy(new_reclam.status, status);
     printf("\n----------------Ajouter votre reclamation---------------\n");
     printf("\n\nnom d'utilisateur\n");
     scanf(" %[^\n]", new_reclam.usernam);
-    printf("\nentrez le motif de la reclamation: \n");
+    printf("\nentrez le motif de la reclamation \n");
     scanf(" %[^\n]", new_reclam.motif);
-    printf("**********Description**********\n");
+    printf("\n**********Description**********\n");
     scanf(" %[^\n]", new_reclam.description);
     printf("\n\nLa categorie de la reclamation\n");
     scanf(" %[^\n]", new_reclam.categorie);
@@ -324,7 +334,7 @@ void new_reclam()
     }
     time_t time_now = time(NULL);
     new_reclam.date_int = time_now;
-    strftime(new_reclam.date, 26, "%Y-%m-%d %H:%M:%S",localtime(&time_now));
+    strftime(new_reclam.date, 26, "%Y-%m-%d %H:%M:%S", localtime(&time_now));
     reclamations[countreclam] = new_reclam;
     countreclam++;
     printf("\n             votre reclamation a ete enregistree avec succes\n");
@@ -335,18 +345,22 @@ void new_reclam()
 
 void affich_reclam()
 {
-    printf("le nombre de reclamations existantes:%d\n", countreclam);
+    if (countreclam==0){
+        printf("\n0 reclamation pour le moment\n\n");
+    }else{
     for (int i = 0; i < countreclam; i++)
-    {
-        printf("-----------------------------------------\nla reclamation numero %d:\n", i + 1);
-        printf("ID du reclamation:%d\n", reclamations[i].id);
-        printf("le nom du client:%s\n", reclamations[i].usernam);
-        printf("notes pour cette reclamation: %s\n", reclamations[i].notes);
-        printf("rempli le %s\n",reclamations[i].date);
-        printf("Le motif de la reclamation %s\n", reclamations[i].motif);
-        printf("**********Descriptions***********\n%s\n", reclamations[i].description);
-        printf("la priorite : %s\n", reclamations[i].priorat);
-        printf("Le statut de la reclamation=(%s)\n-----------------------------------------\n", reclamations[i].status);
+        {
+            printf("\n-------------------------------------------------------------------\n");
+            printf("ID du reclamation:              %d\n", reclamations[i].id);
+            printf("le nom du client:               %s\n", reclamations[i].usernam);
+            printf("notes pour cette reclamation    %s\n", reclamations[i].notes);
+            printf("rempli le                       %s\n", reclamations[i].date);
+            printf("Le motif de la reclamation      %s\n", reclamations[i].motif);
+            printf("la priorite                    <%s>\n", reclamations[i].priorat);
+            printf("\n[Descriptions]\n***%s***\n", reclamations[i].description);
+            printf("\nLe statut de la reclamation=(%s)\n", reclamations[i].status);
+            printf("----------------------------------------------------------------------\n");
+        }
     }
 }
 // modifier ou supprime la reclam
@@ -355,6 +369,7 @@ void edit_reclam()
 {
     int choice, idReclam, isfound = 0, ind_reclam = 0;
     time_t timenow;
+    struct reclamation new_recl;
     printf("entrez ID de reclamation: \n");
     scanf("%d", &idReclam);
     for (int i = 0; i < countreclam; i++)
@@ -375,7 +390,7 @@ void edit_reclam()
         if (choix == 1)
         {
             printf("voulez-vouz modifiez:\n");
-            printf("   (1) Le motif:\n   (2)Description\n   (3)Categorie\n");
+            printf("   (1) Le motif\n   (2) Description\n   (3) Categorie\n");
             printf("votre choix: ");
             scanf("%d", &choice);
             if (choice == 1)
@@ -385,8 +400,10 @@ void edit_reclam()
                 printf("entrez votre modification: ");
                 scanf(" %[^\n]", newmotif);
                 strcpy(reclamations[ind_reclam].motif, newmotif);
-                timenow= time(NULL);
-                strftime(reclamations[ind_reclam].date, 26, "%Y-%m-%S %H:%M:%S",localtime(&timenow));
+                timenow = time(NULL);
+                new_recl.date_int = timenow;
+                strftime(reclamations[ind_reclam].date, 26, "%Y-%m-%S %H:%M:%S", localtime(&timenow));
+                
             }
             else if (choice == 2)
             {
@@ -396,7 +413,8 @@ void edit_reclam()
                 scanf(" %[^\n]", new_descrip);
                 strcpy(reclamations[ind_reclam].description, new_descrip);
                 timenow = time(NULL);
-                strftime(reclamations[ind_reclam].date,26,"%Y-%m-%S %H:%M:%S",localtime(&timenow));
+                new_recl.date_int = timenow;
+                strftime(reclamations[ind_reclam].date, 26, "%Y-%m-%S %H:%M:%S", localtime(&timenow));
             }
             else if (choice == 3)
             {
@@ -406,7 +424,8 @@ void edit_reclam()
                 scanf(" %[^\n]", new_category);
                 strcpy(reclamations[ind_reclam].categorie, new_category);
                 timenow = time(NULL);
-                strftime(reclamations[ind_reclam].date,26,"%Y-%m-%S %H:%M:%S",localtime(&timenow));
+                new_recl.date_int = timenow;
+                strftime(reclamations[ind_reclam].date, 26, "%Y-%m-%S %H:%M:%S", localtime(&timenow));
             }
             else
             {
@@ -439,13 +458,13 @@ void edit_reclam()
 void traiter_reclam()
 {
     int idReclam, ind_reclam, isfound;
-    printf("entrez ID de reclamation: \n");
+    printf("\nentrez ID de reclamation: \n");
     scanf("%d", &idReclam);
     for (int i = 0; i < countreclam; i++)
     {
         if (idReclam == reclamations[i].id)
         {
-            printf("id est trouve");
+            printf("\nid est trouve\n");
             isfound = 1;
             ind_reclam = i;
             break;
@@ -473,10 +492,9 @@ void traiter_reclam()
         {
             strcpy(reclamations[ind_reclam].status, "resolu");
             printf("\nle processus reussit\n\n");
-            date_after_resol= time(NULL);
-            delayTime[countDelay]= date_after_resol - reclamations[ind_reclam].date_int;
+            date_after_resol = time(NULL);
+            delayTime[countDelay] = date_after_resol - reclamations[ind_reclam].date_int;
             countDelay++;
-
         }
         else
         {
@@ -497,7 +515,7 @@ void traiter_reclam()
     }
     else
     {
-        printf("id n'est trouve pas");
+        printf("\nid n'est trouve pas\n");
     }
 }
 
@@ -506,7 +524,7 @@ void traiter_reclam()
 void find_reclam()
 {
     int choix, id;
-    char nom[20], status[10], category[30],date[11];
+    char nom[20], status[10], category[30], date[11];
     printf("\nvous pouvez rechercher par l'un des elements suivants:\n");
     printf("(1)id\t\t\t(2)nom du client\n");
     printf("(3)statut\t\t(4)categorie de reclamationt\n");
@@ -526,7 +544,7 @@ void find_reclam()
                 printf("ID du reclamation:%d\n", reclamations[i].id);
                 printf("le nom du client:%s\n", reclamations[i].usernam);
                 printf("la note : %s\n", reclamations[i].notes);
-                printf("rempli le %s\n",reclamations[i].date);
+                printf("rempli le %s\n", reclamations[i].date);
                 printf("Le motif de la reclamation %s\n", reclamations[i].motif);
                 printf("**********Descriptions***********\n%s\n", reclamations[i].description);
                 printf("la priorite: %s\n", reclamations[i].priorat);
@@ -550,7 +568,7 @@ void find_reclam()
                 printf("ID du reclamation:%d\n", reclamations[i].id);
                 printf("le nom du client:%s\n", reclamations[i].usernam);
                 printf("la note : %s\n", reclamations[i].notes);
-                printf("rempli le %s\n",reclamations[i].date);
+                printf("rempli le %s\n", reclamations[i].date);
                 printf("Le motif de la reclamation %s\n", reclamations[i].motif);
                 printf("**********Descriptions***********\n%s\n", reclamations[i].description);
                 printf("la priorite: %s\n", reclamations[i].priorat);
@@ -573,7 +591,7 @@ void find_reclam()
                 printf("ID du reclamation:%d\n", reclamations[i].id);
                 printf("le nom du client:%s\n", reclamations[i].usernam);
                 printf("la note : %s\n", reclamations[i].notes);
-                printf("rempli le %s\n",reclamations[i].date);
+                printf("rempli le %s\n", reclamations[i].date);
                 printf("Le motif de la reclamation %s\n", reclamations[i].motif);
                 printf("**********Descriptions***********\n%s\n", reclamations[i].description);
                 printf("la priorite: %s\n", reclamations[i].priorat);
@@ -596,7 +614,7 @@ void find_reclam()
                 printf("ID du reclamation:%d\n", reclamations[i].id);
                 printf("le nom du client:%s\n", reclamations[i].usernam);
                 printf("la note : %s\n", reclamations[i].notes);
-                printf("rempli le %s\n",reclamations[i].date);
+                printf("rempli le %s\n", reclamations[i].date);
                 printf("Le motif de la reclamation %s\n", reclamations[i].motif);
                 printf("**********Descriptions***********\n%s\n", reclamations[i].description);
                 printf("la priorite: %s\n", reclamations[i].priorat);
@@ -610,16 +628,16 @@ void find_reclam()
         break;
     case 5:
         printf("entrez la date de reclamation (YYYY-MM-DD) : \n");
-        scanf(" %[^\n]",date);
+        scanf(" %[^\n]", date);
         for (int i = 0; i < countreclam; i++)
         {
-            if (strstr(reclamations[i].date, date) != NULL )
+            if (strstr(reclamations[i].date, date) != NULL)
             {
                 printf("la/les reclamation a ete trouve \n");
                 printf("ID du reclamation:%d\n", reclamations[i].id);
                 printf("le nom du client:%s\n", reclamations[i].usernam);
                 printf("la note : %s\n", reclamations[i].notes);
-                printf("rempli le %s\n",reclamations[i].date);
+                printf("rempli le %s\n", reclamations[i].date);
                 printf("Le motif de la reclamation %s\n", reclamations[i].motif);
                 printf("**********Descriptions***********\n%s\n", reclamations[i].description);
                 printf("la priorite: %s\n", reclamations[i].priorat);
@@ -860,10 +878,11 @@ void client_MS_reclam()
         time_t time_now = time(NULL);
         printf("\n (1) pour modifier la reclamation \n (2) pour supprimer la reclamation \nvotre choix: ");
         scanf("%d", &choix);
-        if(difftime(time_now,reclamations[ind_reclam].date_int)>=86.400){
-                printf("\ndesole, vous avez depasse le temps minimum pour editer votre reclamation\n");
-            }
-        else if(choix == 1)
+        if (difftime(time_now, reclamations[ind_reclam].date_int) >= 86400)
+        {
+            printf("\ndesole, vous avez depasse le temps minimum pour editer votre reclamation\n");
+        }
+        else if (choix == 1)
         {
             printf("voulez-vouz modifiez:\n");
             printf("   (1) Le motif:\n   (2)Description\n   (3)Categorie\n");
@@ -919,43 +938,65 @@ void client_MS_reclam()
     }
 }
 
-void stats_rapp(){
-    int choice,taux=0;
-    int num_resolue=0,num_of_delay=0;
+void stats_rapp()
+{
+    int choice, taux = 0;
+    int num_resolue = 0, num_of_delay = 0;
     printf("\n   (1) Afficher le nombre total de reclamations\n");
     printf("   (2) Afficher le taux de resolution des reclamations\n");
     printf("   (3)  le delai moyen de traitement des reclamations\n");
-    scanf("%d",&choice);
-        if(choice==1){
+    scanf("%d", &choice);
+    if (choice == 1)
+    {
+        printf("\n-----------------------------------------\n");
+        printf("le nombre total de reclamations= %d", countreclam);
+        printf("\n-----------------------------------------\n");
+    }
+    else if (choice == 2)
+    {
+        if (countDelay == 0)
+        {
+            printf("\naucune resolu reclamation exist\n");
+        }
+        else
+        {
+            for (int i = 0; i < countreclam; i++)
+            {
+                if (strcmp(reclamations[i].status, "resolu") == 0)
+                    num_resolue++;
+            }
+            taux = (num_resolue * 100) / countreclam;
+            printf("\n-----------------------------------------");
             printf("\n-----------------------------------------\n");
+            printf("le taux de resolution des reclamations= %d %%", taux);
+            printf("\n-----------------------------------------");
             printf("\n-----------------------------------------\n");
-            printf("le nombre total de reclamations= %d",countreclam);
-            printf("\n-----------------------------------------\n");
-            printf("\n-----------------------------------------\n");
-        }else if(choice==2){
-                for(int i=0;i<countreclam;i++){
-                    if(strcmp(reclamations[i].status,"resolu")==0)
-                        num_resolue++;
-                }
-                taux=(num_resolue*100) / countreclam ;
-                printf("\n-----------------------------------------");
-                printf("\n-----------------------------------------\n");
-                printf("le taux de resolution des reclamations= %d %%",taux);
-                printf("\n-----------------------------------------");
-                printf("\n-----------------------------------------\n");
-        }else if(choice ==3) {
-            for(int i=0;i<countDelay;i++){
+        }
+    }
+    else if (choice == 3)
+    {
+        if (countDelay == 0)
+        {
+            printf("\naucune resolu reclamation exist\n");
+        }
+        else
+        {
+            for (int i = 0; i < countDelay; i++)
+            {
                 num_of_delay += delayTime[i];
             }
-            printf("\nle delai moyen de traitement=%d\n",num_of_delay/countDelay);
-        }else{
-            printf("\nce choix n'existe pas\n");
+            printf("\nle delai moyen de traitement=%d\n", num_of_delay / countDelay);
         }
-        }
+    }
+    else
+    {
+        printf("\nce choix n'existe pas\n");
+    }
+}
 
 int main()
 {
-    printf("bienvenue sur notre site de gerer les reclamations de notre clients\n");
+    printf("\n\n\t<<< bienvenue sur notre site de gerer les reclamations de notre clients>>>\n\n\n");
     menu_user();
 
     return 0;
